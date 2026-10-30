@@ -48,7 +48,7 @@ PORT     STATE SERVICE     VERSION
 
 Port 21 is running **vsftpd 2.3.4** — a version with a publicly documented backdoor (CVE-2011-2523) introduced via a compromised source code package. This was identified as the primary attack vector due to the known severity and reliable exploit availability in Metasploit.
 
-> **Screenshot:** *(add nmap output screenshot here)*
+![nmap scan](../screenshots/nmap-scan.png)
 
 ---
 
@@ -103,7 +103,7 @@ meterpreter >
 
 A Meterpreter session was successfully opened, providing a fully interactive post-exploitation shell on the target.
 
-> **Screenshot:** *(add Meterpreter session screenshot here)*
+![meterpreter session](../screenshots/meterpreter-session.png)
 
 ---
 
@@ -147,30 +147,36 @@ service:$1$kR3ue7JZ$7GxELDupr5Ohp6cjZ3Bu//:14715:0:99999:7:::
 
 All hashes use the MD5crypt (`$1$`) algorithm, which is computationally weak by modern standards.
 
-> **Screenshot:** *(add /etc/shadow output screenshot here)*
+![shadow dump](../screenshots/shadow-dump.png)
 
 ---
 
 ## Credential Cracking
 
-Hashes were saved locally on Kali and cracked offline using John the Ripper with the rockyou.txt wordlist.
+Hashes were saved locally on Kali and cracked offline using John the Ripper with a targeted wordlist.
 
 **Command:**
 ```bash
-john --wordlist=/usr/share/wordlists/rockyou.txt --format=md5crypt ~/hashes.txt
+john --wordlist=~/custom.txt --format=md5crypt ~/hashes.txt
 ```
 
 **Result:**
 ```
+user             (user)
+postgres         (postgres)
 msfadmin         (msfadmin)
-1g 0:00:00:00 DONE
+3g 0:00:00:00 DONE
 ```
 
 | Username | Cracked Password | Method |
 |---|---|---|
-| msfadmin | msfadmin | Dictionary (rockyou.txt) |
+| user | user | Dictionary |
+| postgres | postgres | Dictionary |
+| msfadmin | msfadmin | Dictionary |
 
-The `msfadmin` account password matched the username exactly, cracked in under one second.
+All three passwords matched their respective usernames exactly — cracked in under one second.
+
+![john cracked](../screenshots/john-cracked.png)
 
 ---
 
@@ -179,7 +185,7 @@ The `msfadmin` account password matched the username exactly, cracked in under o
 | Finding | Severity | Detail |
 |---|---|---|
 | VSFTPd 2.3.4 backdoor | Critical | Unauthenticated remote root access via CVE-2011-2523 |
-| Weak credential policy | High | Username equals password (msfadmin:msfadmin) |
+| Weak credential policy | High | Username equals password across multiple accounts |
 | MD5crypt password hashing | High | Outdated algorithm, trivially cracked offline |
 | Shadow file readable via exploit | Critical | Full credential exposure after initial compromise |
 
