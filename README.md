@@ -23,6 +23,8 @@ All labs are conducted on an isolated host-only virtual network with no internet
 | # | Title | Techniques | CVE |
 |---|---|---|---|
 | 01 | [VSFTPd 2.3.4 Backdoor](labs/01-vsftpd-backdoor.md) | Exploitation, Post-Exploitation, Credential Cracking | CVE-2011-2523 |
+| 02 | [UnrealIRCd 3.2.8.1 Backdoor](labs/02-unrealircd-backdoor.md) | Manual Exploitation, Reverse Shell, Netcat | CVE-2010-2075 |
+| 03 | [Samba usermap_script Command Injection](labs/03-samba-usermap.md) | Command Injection, Misconfiguration Analysis | CVE-2007-2447 |
 
 *More labs in progress.*
 
